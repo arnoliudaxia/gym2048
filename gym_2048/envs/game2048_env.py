@@ -167,14 +167,15 @@ class Game2048Env(gym.Env):
             return np.asarray(pil_board)
             # return np.asarray(pil_board).swapaxes(0, 1)
 
-        outfile = StringIO() if mode == 'ansi' else sys.stdout
-        s = 'Score: {}\n'.format(self.score)
+        s = 'Score: {}\t'.format(self.score)
         s += 'Highest: {}\n'.format(self.highest())
+
         npa = np.array(self.Matrix)
         grid = npa.reshape((self.size, self.size))
-        s += "{}\n".format(grid)
-        outfile.write(s)
-        return outfile
+        if mode=="console":
+            outfile = StringIO() if mode == 'ansi' else sys.stdout
+            outfile.write(s+ "{}\n".format(grid))
+        return {"Score":self.score,"Highest":self.highest()}
 
     # Implement 2048 game
     def add_tile(self):
